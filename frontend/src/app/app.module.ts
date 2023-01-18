@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http'
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { EmployeeListComponent } from './employee-list/employee-list.component';
-import { CreateEmployeeComponent } from './create-employee/create-employee.component';
+import { EmployeeListComponent } from './components/employee-list/employee-list.component';
+import { CreateEmployeeComponent } from './components/create-employee/create-employee.component';
 import { FormsModule } from '@angular/forms';
-import { UpdateEmployeeComponent } from './update-employee/update-employee.component';
-import { EmployeeDetailsComponent } from './employee-details/employee-details.component';
-import { TaskListComponent } from './task-list/task-list.component';
-import { CreateTaskComponent } from './create-task/create-task.component';
+import { UpdateEmployeeComponent } from './components/update-employee/update-employee.component';
+import { EmployeeDetailsComponent } from './components/employee-details/employee-details.component';
+import { TaskListComponent } from './components/task-list/task-list.component';
+import { CreateTaskComponent } from './components/create-task/create-task.component';
+import { UserLoginComponent } from './components/user-login/user-login.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { CustomInterceptor } from './services/custom.interceptor';
 
 @NgModule({
   declarations: [
@@ -19,7 +22,9 @@ import { CreateTaskComponent } from './create-task/create-task.component';
     UpdateEmployeeComponent,
     EmployeeDetailsComponent,
     TaskListComponent,
-    CreateTaskComponent
+    CreateTaskComponent,
+    UserLoginComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +32,10 @@ import { CreateTaskComponent } from './create-task/create-task.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS, useClass:CustomInterceptor,
+    multi:true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

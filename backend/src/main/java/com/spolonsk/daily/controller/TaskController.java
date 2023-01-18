@@ -13,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/")
+@CrossOrigin
 public class TaskController {
 
 
@@ -20,21 +21,18 @@ public class TaskController {
   private TaskRepository taskRepository;
 
   //get all tasks
-  @CrossOrigin(origins = "http://localhost:4200")
   @GetMapping("/tasks")
   public List<Task> getAllTasks(){
     return taskRepository.findAll();
   }
 
   //create task
-  @CrossOrigin(origins = "http://localhost:4200")
   @PostMapping("/tasks")
   public Task createTask(@RequestBody Task task){
     return taskRepository.save(task);
   }
 
   //get task by ID
-  @CrossOrigin(origins = "http://localhost:4200")
   @GetMapping("/tasks/{id}")
   public ResponseEntity<Task> getTaskById(@PathVariable Long id){
     Task task = taskRepository.
@@ -46,7 +44,6 @@ public class TaskController {
   }
 
   //update existing task
-  @CrossOrigin(origins = "http://localhost:4200")
   @PutMapping("/tasks/{id}")
   public ResponseEntity<Task> updateTask(
     @PathVariable Long id,@RequestBody Task newTask) {
@@ -61,7 +58,6 @@ public class TaskController {
     return ResponseEntity.ok(updatedTask);
   }
   //delete task
-  @CrossOrigin(origins = "http://localhost:4200")
   @DeleteMapping("/tasks/{id}")
   public ResponseEntity<Map<String,Boolean>> deleteTask(@PathVariable Long id){
     Task task = taskRepository.
