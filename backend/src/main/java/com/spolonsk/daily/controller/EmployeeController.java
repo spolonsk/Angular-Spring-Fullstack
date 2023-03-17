@@ -5,11 +5,15 @@ import com.spolonsk.daily.model.Employee;
 import com.spolonsk.daily.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -31,13 +35,20 @@ public class EmployeeController {
     }
 
     //get employee by ID
-    @GetMapping("/employees/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id){
-        Employee employee = employeeRepository.
-                findById(id).orElseThrow(
+    @GetMapping("/employees/{email_id}")
+    public List<Employee> getEmployeeById(@PathVariable String email_id){
+        /*List<Employee> employees = employeeRepository.
+                findByEmailId(email_id).orElseThrow(
                         ()->new ResourceNotFoundException
-                                ("Employee not found " + id));
-        return ResponseEntity.ok(employee);
+                                ("Employee not found " + email_id));*/
+      UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext()
+        .getAuthentication()
+        .getPrincipal();
+      String currentUserId = userDetails.getUsername();
+      if (!currentUserId.equals(email_id)) {
+        throw new AccessDeniedException("You are not authorized to access this resource.");
+      }
+        return employeeRepository.findByEmailId(email_id);
 
     }
 
